@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
+
+      - name: Initialize and Build APK
+        run: |
+          # This is a simplified build using a manifest-only approach
+          # In a real scenario, bubblewrap needs a few more inputs, 
+          # but we can trigger a cloud build or use a simpler wrapper.
+          echo "Building APK from PWA Manifest..."
+          # For now, we'll use a widely used community action for Web-to-APK 
+          # to ensure it works first try without complex CLI configs.
+          
+      - name: Build Web to APK
+        uses: khaledosman/web-to-apk-action@v1.0.0
+        with:
+          app-name: "Finance Manager"
+          app-id: "app.financemanager.monochrome"
+          url: "https://jooxxhere.github.io/FINANCE-MANAGER/"
+          icon-url: "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: FinanceManager-APK
+          path: ./*.apk
