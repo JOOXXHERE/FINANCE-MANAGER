@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Manager | Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-vault fa-2x"></i>
+                <span>ADMIN PANEL</span>
+            </div>
+            <nav>
+                <a href="#" class="active"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="#" id="refresh-btn"><i class="fa-solid fa-rotate"></i> Refresh Data</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>v1.0.0 Monochrome</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h1>User Management</h1>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="user-search" placeholder="Search by name or username...">
+                </div>
+            </header>
+
+            <section class="stats-overview">
+                <div class="stat-card">
+                    <p>Total Users</p>
+                    <h2 id="total-users-count">0</h2>
+                </div>
+                <div class="stat-card">
+                    <p>Active Trials</p>
+                    <h2 id="active-trials-count">0</h2>
+                </div>
+                <div class="stat-card">
+                    <p>Expired Accounts</p>
+                    <h2 id="expired-accounts-count">0</h2>
+                </div>
+            </section>
+
+            <section class="user-list-section">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Username</th>
+                            <th>Trial Started</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        <!-- Rows will be injected here -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="user-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2 id="modal-user-name">User Bills</h2>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="bills-container">
+                    <table class="bills-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Merchant</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bills-table-body">
+                            <!-- Bills injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validity Selection Modal -->
+    <div id="validity-modal" class="modal hidden">
+        <div class="modal-content glass-panel" style="width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h2>Extend Validity</h2>
+                <button class="close-validity icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Select the extension period for this user:</p>
+            <div class="validity-options" style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn" onclick="applyExtension(0)">+ 1 Minute (Reset)</button>
+                <button class="btn" onclick="applyExtension(3)">+ 3 Days</button>
+                <button class="btn" onclick="applyExtension(30)">+ 1 Month</button>
+                <button class="btn" onclick="applyExtension(365)">+ 1 Year</button>
+                <button class="btn primary-btn" onclick="applyExtension(36500)">LIFETIME ACCESS</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

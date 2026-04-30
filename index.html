@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finance Manager | Monochrome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="glass-panel login-panel">
+            <div class="logo-area">
+                <i class="fa-solid fa-vault fa-3x mono-text"></i>
+                <h1 class="mono-text">Finance Manager</h1>
+                <p>Securely track your financial footprint.</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="profile-upload">
+                    <input type="file" id="profile-pic" accept="image/*" class="hidden">
+                    <label for="profile-pic" class="profile-pic-label" id="profile-preview-label">
+                        <i class="fa-solid fa-user"></i>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-regular fa-user"></i>
+                    <input type="text" id="name-input" placeholder="Full Name" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-hashtag"></i>
+                    <input type="text" id="username-input" placeholder="Unique Username" required>
+                </div>
+
+                <button type="submit" class="btn primary-btn">Login to Vault</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen hidden">
+        <header class="dashboard-header glass-panel">
+            <div class="user-info">
+                <div class="avatar-wrapper" id="edit-profile-trigger">
+                    <img id="dash-profile-img" src="" alt="Profile" class="dash-avatar">
+                    <div class="edit-overlay"><i class="fa-solid fa-pen"></i></div>
+                </div>
+                <div>
+                    <p class="greeting">Authenticated as,</p>
+                    <h2 id="dash-name">User</h2>
+                </div>
+            </div>
+            <button id="logout-btn-dash" class="icon-btn"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </header>
+
+        <main class="dashboard-content">
+            <div class="balance-card glass-panel">
+                <div class="currency-picker">
+                    <select id="currency-select">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="JPY">JPY (¥)</option>
+                    </select>
+                </div>
+                <p>Total Recorded Expenses</p>
+                <h1 id="total-balance" class="mono-text">$0.00</h1>
+                <div class="trial-banner" id="trial-banner">
+                    <i class="fa-solid fa-shield-halved"></i> <span id="trial-days">3 days trial active</span>
+                </div>
+            </div>
+
+            <div class="chart-container glass-panel">
+                <canvas id="spendingChart"></canvas>
+            </div>
+
+            <div class="action-buttons solo-action">
+                <button id="manual-btn" class="action-card glass-panel">
+                    <div class="icon-wrapper"><i class="fa-solid fa-plus"></i></div>
+                    <span>Add Manual Bill</span>
+                </button>
+            </div>
+
+            <div class="recent-transactions">
+                <div class="section-header">
+                    <h3>Ledger History</h3>
+                </div>
+                <div id="transactions-list" class="transactions-list">
+                    <!-- Transactions will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Manual Entry Screen -->
+    <div id="manual-screen" class="screen hidden">
+        <header class="glass-panel top-bar">
+            <button class="back-btn icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            <h2>Record Bill</h2>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <div class="form-container">
+            <form id="manual-form" class="glass-panel">
+                <input type="hidden" id="edit-bill-id">
+                <div class="input-group">
+                    <i class="fa-solid fa-coins"></i>
+                    <input type="number" id="manual-amount" placeholder="Amount" step="0.01" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-building"></i>
+                    <input type="text" id="manual-merchant" placeholder="Merchant or App Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-tag"></i>
+                    <input type="text" id="manual-category" placeholder="Category (e.g. Food, Rent)" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <input type="date" id="manual-date" required>
+                </div>
+                <button type="submit" class="btn primary-btn">Commit to Ledger</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Screen -->
+    <div id="edit-profile-screen" class="screen hidden">
+        <header class="glass-panel top-bar">
+            <button class="back-btn icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            <h2>Edit Profile</h2>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <div class="form-container">
+            <form id="edit-profile-form" class="glass-panel">
+                <div class="profile-upload">
+                    <input type="file" id="edit-profile-pic" accept="image/*" class="hidden">
+                    <label for="edit-profile-pic" class="profile-pic-label" id="edit-profile-preview">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                </div>
+                <div class="input-group">
+                    <i class="fa-regular fa-user"></i>
+                    <input type="text" id="edit-name-input" placeholder="Full Name" required>
+                </div>
+                <button type="submit" class="btn primary-btn">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Paywall Screen -->
+    <div id="paywall-screen" class="screen hidden">
+        <div class="glass-panel paywall-panel">
+            <div class="lock-icon">
+                <i class="fa-solid fa-shield-lock fa-4x mono-text"></i>
+            </div>
+            <h2>Premium Required</h2>
+            <p>Your standard trial has concluded. To maintain access to your ledger and continue recording expenses, please subscribe to our professional tier.</p>
+            
+            <div class="contact-options">
+                <a href="mailto:contact@financemanager.app?subject=Upgrade%20to%20Premium" class="btn primary-btn">
+                    <i class="fa-solid fa-envelope"></i> Email for Access
+                </a>
+                <a href="https://wa.me/918590960674?text=I%20would%20like%20to%20upgrade%20my%20Finance%20Manager%20account" target="_blank" class="btn whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp Me
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
